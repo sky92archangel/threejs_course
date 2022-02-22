@@ -3,7 +3,8 @@ import * as THREE from '../../build/three.module.js';
 import { OrbitControls } from '../../jsm/controls/OrbitControls.js';
 // import * as Stats from "../../jsm/libs/stats.module.js";
 import dat from '../../jsm/libs/dat.gui.module.js'
-  
+
+
 
 var containerDom = document.getElementById("container");
 
@@ -31,8 +32,8 @@ function camera_init() {
 
 function controller_init(camera) {
   // Add OrbitControls so that we can pan around with the mouse.
-  var controls = new OrbitControls(camera, renderer.domElement);
-  return controls;
+  var orbitControls = new OrbitControls(camera, renderer.domElement);
+  return orbitControls;
 }
 
 function axes_init() {
@@ -124,32 +125,40 @@ function ConfigGeometry() {
   scene.add(line);
 }
 
-function clone_Mesh(mesh){
+function clone_Mesh(mesh) {
   var cloneGeometry = mesh.geometry.clone();
-  var clonematerial = new MeshBasicMaterial({
-    color:0xff0798,
-    side : THREE.DoubleSide
+  var clonematerial = new THREE.MeshBasicMaterial({
+    color: 0xff0798,
+    side: THREE.DoubleSide
   });
-  var clonemesh = new THREE.Mesh(cloneGeometry,clonematerial);
+  var clonemesh = new THREE.Mesh(cloneGeometry, clonematerial); 
   clonemesh.translateZ(20);
+  clonemesh.position.set(Math.random(),Math.random(),Math.random());
   clonemesh.name = "copy";
   scene.remove(scene.getChildByName("copy"));
-  scene.add(mesh); 
-}
+  scene.add(mesh);
 
-var guiData ;
-function gui_init(){
+  var wireFrame = new THREE.WireframeGeometry(cloneGeometry);
+  var line = new THREE.LineSegments(wireFrame);
+  line.position.set(Math.random(),Math.random(),Math.random());
+  line.material.depthTest = true;
+  scene.add(line);
+
+}
+  
+var guiData;
+function gui_init() {
   //初始化界面的实例容器
   var ctrlInstance = new dat.GUI();
   //定义界面内的所有参数
-  guiData = { 
-    cloneMesh:clone_Mesh    //此处讲函数放到这里   用于按钮触发func的事件
-  }; 
+  // guiData = {
+  //   geometry:geometry,
+  //   cloneMesh: clone_Mesh    //此处讲函数放到这里   用于按钮触发func的事件
+  // };
   //把 界面数据 加载到 界面容器 中   
-  ctrlInstance.add(guiData,'cloneMesh');
+  ctrlInstance.add(guiData, 'cloneMesh');
   return ctrlInstance;
-} 
-
+}
 
 function plane_init() {
   //地面创建
@@ -184,14 +193,30 @@ function spotLight_init() {
 }
 
 var camera = camera_init();
-var controls = controller_init(camera);
+var orbitControls = controller_init(camera);
 var axes = axes_init();
 var boxGeom = box_init();
 var torusGeom = torus_init();
 var cylinderGeom = cylinder_init();
 var configGeom = ConfigGeometry();
-gui_init();
 
+//-------------------------------------------  
+//dat
+//存放有所有需要改变的属性的对象
+var controls = new function () {
+  this.rotationSpeed = 0.02;
+};
+//创建dat.GUI，传递并设置属性
+var gui = new dat.GUI();
+gui.add(controls, 'rotationSpeed', 0, 0.5);  
+//-------------------------------------------  
+var obj = { emptyFunc : function(){} }; 
+gui.add(obj,'emptyFunc').onChange(function(value) {
+  console.log("onChange:" + value)
+  clone_Mesh(cylinderGeom)
+}); 
+//-------------------------------------------  
+  
 var plane = plane_init();
 var ambientLight = ambientLight_init();
 var spotLight = spotLight_init();
@@ -211,7 +236,7 @@ function resize() {
 
 // Renders the scene
 function animate() {
-  boxGeom.rotation.x += 0.005;
+  boxGeom.rotation.x += controls.rotationSpeed;
   boxGeom.rotation.y += 0.005;
   boxGeom.rotation.z += 0.005;
 
@@ -219,7 +244,7 @@ function animate() {
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  controls.update();
+  orbitControls.update();
 
 
 }
