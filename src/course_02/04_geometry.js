@@ -213,9 +213,14 @@ gui.add(controls, 'rotationSpeed', 0, 0.5);
 var obj = { emptyFunc : function(){} }; 
 gui.add(obj,'emptyFunc').onChange(function(value) {
   console.log("onChange:" + value)
-  clone_Mesh(cylinderGeom)
-}); 
-//-------------------------------------------  
+  clone_Mesh(cylinderGeom) //启用克隆动作
+});  
+//-------------------------------------------
+var controlBool = new function () {
+  this.visible = true
+};
+gui.add(controlBool, 'visible');
+//------------------------------------------- 
   
 var plane = plane_init();
 var ambientLight = ambientLight_init();
@@ -241,10 +246,10 @@ function animate() {
   boxGeom.rotation.z += 0.005;
 
   torusGeom.rotation.x += 0.03;
+  cylinderGeom.visible = controlBool.visible;
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
   orbitControls.update();
-
-
+ 
 }
