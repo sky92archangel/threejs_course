@@ -87,7 +87,7 @@ function spotLight_init(){
   spotLight.shadow.camera.far = 500; 
   spotLight.shadow.camera.near = 10;
   scene.add(spotLight);
-  return scene;
+  return spotLight;
 }
 
 
@@ -122,18 +122,37 @@ ambientLightFolder.addColor(controlAmbientLight, 'ambientColor' ).onChange(clr=>
 //------------------------------------------------------------------
 var spotLightFolder = gui.addFolder("spotLightGroup");
 var controlSpotLight= new function () {
-  this.intensity = 0.02;
+  this.spotIntensity = 0.02;
   this.spotColor = 0x000FF0;
+  this.spotDistance = 0 ;
+  this.spotAngle = Math.PI*0.3;
+  this.spotPenumbra = 0;
+  this.spotDecay = 0;
 };  
-spotLightFolder.add(controlSpotLight, 'intensity',0,5).onChange(intensity=>{
+spotLightFolder.add(controlSpotLight, 'spotIntensity',0,5).onChange(intensity=>{
   spotLight.intensity = intensity;
 });    
 spotLightFolder.addColor(controlSpotLight, 'spotColor' ).onChange(clr=>{
   console.log(clr);
   spotLight.color = new THREE.Color(clr);
 });  
+spotLightFolder.add(controlSpotLight, 'spotDistance',0,1000).onChange(dis=>{
+  spotLight.distance = dis;
+});  
+spotLightFolder.add(controlSpotLight, 'spotAngle',0,Math.PI*2).onChange(angle=>{
+  spotLight.angle = angle;
+});  
+spotLightFolder.add(controlSpotLight, 'spotPenumbra',0,1).onChange(pen=>{
+  spotLight.penumbra = pen;
+});  
+spotLightFolder.add(controlSpotLight, 'spotDecay',0,1).onChange(dec=>{
+  spotLight.decay = dec;
+});  
 //------------------------------------------------------------------
-
+var lightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(lightHelper);
+var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+scene.add(shadowCameraHelper);
 //------------------------------------------------------------------
 resize();
 animate();
@@ -155,8 +174,9 @@ function animate() {
   // mesh.rotation.z += 0.005;
   // spotLight.position.x+=0.1; 
 
-  // ambientLight.intensity = controlAmbientLight.intensity;
-
+  lightHelper.update();
+  shadowCameraHelper.update();
+  
   requestAnimationFrame(animate);
   renderer.render(scene, camera);  
   controls.update();
