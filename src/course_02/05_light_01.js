@@ -31,8 +31,8 @@ function camera_init(){
 
 function controller_init(camera){
   // Add OrbitControls so that we can pan around with the mouse.
-  var controls = new OrbitControls(camera, renderer.domElement);
-  return controls;
+  var orbitControls = new OrbitControls(camera, renderer.domElement);
+  return orbitControls;
 }
   
 function axes_init(){ 
@@ -80,6 +80,7 @@ function ambientLight_init(){
 function spotLight_init(){
   //聚光灯
   var spotLight = new THREE.SpotLight(0xFFFFFF);   //六个参数 ：  光照颜色  强度  最大距离  散射角度   光锥半影衰减百分比   光照距离衰减量
+  spotLight.intensity = 0.5;
   spotLight.position.set(60, 40, 45);  
   spotLight.castShadow = true;
   spotLight.shadow.mapSize = new THREE.Vector2(1024,1024);
@@ -104,7 +105,7 @@ var spotLight = spotLight_init();
 //------------------------------------------------------------------
 var gui = new dat.GUI(); 
 //------------------------------------------------------------------
-//环境光控制 
+//环境光控制  
 var ambientLightFolder = gui.addFolder("ambientLightGroup");
 var controlAmbientLight= new function () {
   this.intensity = 0.02;
@@ -115,18 +116,20 @@ ambientLightFolder.add(controlAmbientLight, 'intensity',0,0.5).onChange(intensit
   ambientLight.intensity = intensity;
 });    
 ambientLightFolder.addColor(controlAmbientLight, 'ambientColor' ).onChange(clr=>{
+  console.log(clr);
   ambientLight.color = new THREE.Color(clr);
 });   
 //------------------------------------------------------------------
 var spotLightFolder = gui.addFolder("spotLightGroup");
 var controlSpotLight= new function () {
   this.intensity = 0.02;
-  this.spotColor = 0x000000;
+  this.spotColor = 0x000FF0;
 };  
-spotLightFolder.add(controlSpotLight, 'intensity',0,50).onChange(intensity=>{
+spotLightFolder.add(controlSpotLight, 'intensity',0,5).onChange(intensity=>{
   spotLight.intensity = intensity;
 });    
 spotLightFolder.addColor(controlSpotLight, 'spotColor' ).onChange(clr=>{
+  console.log(clr);
   spotLight.color = new THREE.Color(clr);
 });  
 //------------------------------------------------------------------
@@ -150,6 +153,7 @@ function animate() {
   // mesh.rotation.x += 0.005;
   // mesh.rotation.y += 0.005;
   // mesh.rotation.z += 0.005;
+  // spotLight.position.x+=0.1; 
 
   // ambientLight.intensity = controlAmbientLight.intensity;
 
