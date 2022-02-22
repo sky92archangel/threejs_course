@@ -68,14 +68,14 @@ function plane_init(){
   return plane;
 }
 
+//==================================================
 //创建环境光
 function ambientLight_init(){
   //环境光
   var ambientLight = new THREE.AmbientLight(0x111111);
   scene.add(ambientLight)
   return ambientLight;
-}
-  
+}  
 //创建聚光灯
 function spotLight_init(){
   //聚光灯
@@ -89,7 +89,33 @@ function spotLight_init(){
   scene.add(spotLight);
   return spotLight;
 }
+function pointLight_init(){
+  var pointLight = new THREE.PointLight(0xffffff,6,160);
+  pointLight.position.set(-20,20,20);
+  pointLight.castShadow = true;
+  scene.add(pointLight); 
+  return pointLight; 
+}
 
+function sphere_init(){  
+  var sphereGeom = new THREE.SphereGeometry(0.2);
+  var sphereMat = new THREE.MeshBasicMaterial({color:0xff0000});
+  var sphereMesh = new THREE.Mesh(sphereGeom, sphereMat);
+  sphereMesh.castShadow = true;  
+  scene.add(sphereMesh);
+  return sphereMesh ;
+}
+function directionLight_init(){
+  var directionLight = new THREE.DirectionalLight(0xffffff,2);
+  directionLight.castShadow = true;
+  directionLight.shadow.mapSize.width = 1024;
+  directionLight.shadow.mapSize.height = 1024;
+  directionLight.position.set(50,50,5-50);
+  scene.add(directionLight);
+  return directionLight;
+}
+
+//==================================================
 
 var camera = camera_init();
 var controls = controller_init(camera);
@@ -98,8 +124,11 @@ var mesh = box_init();
 var plane  =plane_init();
 var ambientLight = ambientLight_init();
 var spotLight = spotLight_init(); 
-
-
+var pointLight = pointLight_init();
+var sphereMesh  = sphere_init();
+sphereMesh.position.copy(pointLight.position);
+var directionLight = directionLight_init();
+directionLight.target =mesh;
 //------------------------------------------------------------------
 //控制
 //------------------------------------------------------------------
@@ -107,52 +136,100 @@ var gui = new dat.GUI();
 //------------------------------------------------------------------
 //环境光控制  
 var ambientLightFolder = gui.addFolder("ambientLightGroup");
-var controlAmbientLight= new function () {
+var ambientLightProperty= new function () {
   this.intensity = 0.02;
   this.ambientColor = 0x3462343;
 };   
-// gui.add(controlAmbientLight, 'intensity', 0, 0.5);  // 另一种写法
-ambientLightFolder.add(controlAmbientLight, 'intensity',0,0.5).onChange(intensity=>{
+ambientLightFolder.add(ambientLightProperty, 'intensity',0,5).onChange(intensity=>{
   ambientLight.intensity = intensity;
 });    
-ambientLightFolder.addColor(controlAmbientLight, 'ambientColor' ).onChange(clr=>{
+ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=>{
   console.log(clr);
   ambientLight.color = new THREE.Color(clr);
 });   
 //------------------------------------------------------------------
 var spotLightFolder = gui.addFolder("spotLightGroup");
-var controlSpotLight= new function () {
+var spotLightProperty= new function () {
   this.spotIntensity = 0.02;
   this.spotColor = 0x000FF0;
   this.spotDistance = 0 ;
   this.spotAngle = Math.PI*0.3;
   this.spotPenumbra = 0;
   this.spotDecay = 0;
+  this.spotVisibility = true;
 };  
-spotLightFolder.add(controlSpotLight, 'spotIntensity',0,5).onChange(intensity=>{
+spotLightFolder.add(spotLightProperty, 'spotIntensity',0,5).onChange(intensity=>{
   spotLight.intensity = intensity;
 });    
-spotLightFolder.addColor(controlSpotLight, 'spotColor' ).onChange(clr=>{
+spotLightFolder.addColor(spotLightProperty, 'spotColor' ).onChange(clr=>{
   console.log(clr);
   spotLight.color = new THREE.Color(clr);
 });  
-spotLightFolder.add(controlSpotLight, 'spotDistance',0,1000).onChange(dis=>{
+spotLightFolder.add(spotLightProperty, 'spotDistance',0,1000).onChange(dis=>{
   spotLight.distance = dis;
 });  
-spotLightFolder.add(controlSpotLight, 'spotAngle',0,Math.PI*2).onChange(angle=>{
+spotLightFolder.add(spotLightProperty, 'spotAngle',0,Math.PI*2).onChange(angle=>{
   spotLight.angle = angle;
 });  
-spotLightFolder.add(controlSpotLight, 'spotPenumbra',0,1).onChange(pen=>{
+spotLightFolder.add(spotLightProperty, 'spotPenumbra',0,1).onChange(pen=>{
   spotLight.penumbra = pen;
 });  
-spotLightFolder.add(controlSpotLight, 'spotDecay',0,1).onChange(dec=>{
+spotLightFolder.add(spotLightProperty, 'spotDecay',0,1).onChange(dec=>{
   spotLight.decay = dec;
 });  
+spotLightFolder.add(spotLightProperty, 'spotVisibility').onChange(v=>{
+  spotLight.visible = v;
+});  
 //------------------------------------------------------------------
-var lightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(lightHelper);
+var pointLightFolder = gui.addFolder("pointLightGroup");
+var pointLightProperty= new function () {
+  this.pointColor = 0xffffff; 
+  this.pointIntensity = 3;
+  this.pointDistance = 150;
+  this.pointDecay = 0.5;
+  this.pointVisibility = true;
+};  
+pointLightFolder.addColor(pointLightProperty, 'pointColor').onChange(clr=>{
+  console.log(clr);
+  pointLight.color = new THREE.Color(clr);
+});  
+pointLightFolder.add(pointLightProperty,'pointIntensity',0,10).onChange(ins=>{
+  pointLight.intensity = ins;
+});
+pointLightFolder.add(pointLightProperty,'pointDistance',0,200).onChange(dis=>{
+  pointLight.distance = dis;
+});
+pointLightFolder.add(pointLightProperty,'pointDecay',0,10).onChange(dec=>{
+  pointLight.decay = dec;
+});
+pointLightFolder.add(pointLightProperty,'pointVisibility').onChange(v=>{
+  pointLight.visible = v;
+});
+//------------------------------------------------------------------
+var directionLightFolder = gui.addFolder('directionLightGroup');
+var directionLightProperty = new function () {
+  this.directionColor = 0xff4422;
+  this.directionIntensity = 10;
+  this.directionVisibility = true;
+}
+directionLightFolder.addColor(directionLightProperty,'directionColor').onChange(clr=>{
+  directionLight.color = new THREE.Color(clr);
+})
+directionLightFolder.add(directionLightProperty,'directionIntensity',0,10).onChange(ins=>{
+  directionLight.intensity = ins;
+});
+directionLightFolder.add(directionLightProperty,'directionVisibility',0,10).onChange(v=>{
+  directionLight.visible = v;
+});
+//------------------------------------------------------------------
+var spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
 var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
 scene.add(shadowCameraHelper);
+var pointLightHelper = new THREE.PointLightHelper(pointLight);
+scene.add(pointLightHelper);
+var directionLightHelper = new THREE.DirectionalLightHelper(directionLight,5);
+scene.add(directionLightHelper);
 //------------------------------------------------------------------
 resize();
 animate();
@@ -167,15 +244,21 @@ function resize() {
   camera.updateProjectionMatrix();
 }
   
+var pos = 0 ;
 // Renders the scene
 function animate() { 
   // mesh.rotation.x += 0.005;
   // mesh.rotation.y += 0.005;
   // mesh.rotation.z += 0.005;
   // spotLight.position.x+=0.1; 
+  pos += 0.1;
+  pointLight.position.y = 20* Math.sin( pos );
+  sphereMesh.position.copy(pointLight.position);
 
-  lightHelper.update();
+  spotLightHelper.update();
   shadowCameraHelper.update();
+  pointLightHelper.update();
+  directionLightHelper.update();
   
   requestAnimationFrame(animate);
   renderer.render(scene, camera);  
