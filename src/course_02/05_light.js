@@ -2,7 +2,6 @@
 import * as THREE from '../../build/three.module.js';
 import { OrbitControls } from '../../jsm/controls/OrbitControls.js';
 // import * as Stats from "../../jsm/libs/stats.module.js";
-
 import dat from '../../jsm/libs/dat.gui.module.js'
   
 var containerDom = document.getElementById("container");
@@ -105,6 +104,8 @@ function sphere_init(){
   scene.add(sphereMesh);
   return sphereMesh ;
 }
+
+//平行光
 function directionLight_init(){
   var directionLight = new THREE.DirectionalLight(0xffffff,2);
   directionLight.castShadow = true;
@@ -113,6 +114,13 @@ function directionLight_init(){
   directionLight.position.set(50,50,5-50);
   scene.add(directionLight);
   return directionLight;
+}
+
+function hemisphereLight_init(){
+  //天空色 地面色  强度
+  var hemisphereLight = new THREE.HemisphereLight(0xffffff,0x00ff0f,1);
+  scene.add(hemisphereLight)
+  return hemisphereLight;
 }
 
 //==================================================
@@ -129,6 +137,7 @@ var sphereMesh  = sphere_init();
 sphereMesh.position.copy(pointLight.position);
 var directionLight = directionLight_init();
 directionLight.target =mesh;
+var hemisphereLight = hemisphereLight_init();
 //------------------------------------------------------------------
 //控制
 //------------------------------------------------------------------
@@ -148,6 +157,7 @@ ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=
   ambientLight.color = new THREE.Color(clr);
 });   
 //------------------------------------------------------------------
+//聚光灯控制
 var spotLightFolder = gui.addFolder("spotLightGroup");
 var spotLightProperty= new function () {
   this.spotIntensity = 0.02;
@@ -181,6 +191,7 @@ spotLightFolder.add(spotLightProperty, 'spotVisibility').onChange(v=>{
   spotLight.visible = v;
 });  
 //------------------------------------------------------------------
+//点光源控制
 var pointLightFolder = gui.addFolder("pointLightGroup");
 var pointLightProperty= new function () {
   this.pointColor = 0xffffff; 
@@ -206,6 +217,7 @@ pointLightFolder.add(pointLightProperty,'pointVisibility').onChange(v=>{
   pointLight.visible = v;
 });
 //------------------------------------------------------------------
+//平行光控制
 var directionLightFolder = gui.addFolder('directionLightGroup');
 var directionLightProperty = new function () {
   this.directionColor = 0xff4422;
@@ -222,6 +234,17 @@ directionLightFolder.add(directionLightProperty,'directionVisibility',0,10).onCh
   directionLight.visible = v;
 });
 //------------------------------------------------------------------
+var hemisphereLightFolder =  gui.addFolder('hemisphereLightGroup');
+var hemisphereLightProperty = new function(){
+  this.hemiVisibility = true;
+}
+hemisphereLightFolder.add(hemisphereLightProperty,'hemiVisibility' ).onChange(v=>{
+  hemisphereLight.visible = v;
+});
+//------------------------------------------------------------------
+//------------------------------------------------------------------
+
+//光源范围显示线
 var spotLightHelper = new THREE.SpotLightHelper(spotLight);
 scene.add(spotLightHelper);
 var shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
