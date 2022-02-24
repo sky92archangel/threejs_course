@@ -116,6 +116,8 @@ function directionLight_init(){
   return directionLight;
 }
 
+
+//半球光
 function hemisphereLight_init(){
   //天空色 地面色  强度
   var hemisphereLight = new THREE.HemisphereLight(0xffffff,0x00ff0f,1);
@@ -226,7 +228,7 @@ var directionLightProperty = new function () {
 }
 directionLightFolder.addColor(directionLightProperty,'directionColor').onChange(clr=>{
   directionLight.color = new THREE.Color(clr);
-})
+});
 directionLightFolder.add(directionLightProperty,'directionIntensity',0,10).onChange(ins=>{
   directionLight.intensity = ins;
 });
@@ -237,9 +239,21 @@ directionLightFolder.add(directionLightProperty,'directionVisibility',0,10).onCh
 var hemisphereLightFolder =  gui.addFolder('hemisphereLightGroup');
 var hemisphereLightProperty = new function(){
   this.hemiVisibility = true;
+  this.hemiSkyColor = 0xff4422;
+  this.hemiGroundColor = 0xff4422;
+  this.hemiIntensity = 1;  
 }
 hemisphereLightFolder.add(hemisphereLightProperty,'hemiVisibility' ).onChange(v=>{
   hemisphereLight.visible = v;
+});
+hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiSkyColor').onChange(clr=>{
+  hemisphereLight.color = new THREE.Color(clr);
+});
+hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiGroundColor').onChange(clr=>{
+  hemisphereLight.groundColor = new THREE.Color(clr);
+});
+hemisphereLightFolder.add(hemisphereLightProperty,'hemiIntensity' ,0,10).onChange(ins=>{
+  hemisphereLight.intensity = ins;
 });
 //------------------------------------------------------------------
 //------------------------------------------------------------------
