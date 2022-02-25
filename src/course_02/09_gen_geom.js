@@ -85,18 +85,23 @@ function spotLight_init(){
   scene.add(spotLight);
   return scene;
 }
-
-
-function planeGeom_init(){
-  //宽  高
-  var planeGeom = new THREE.PlaneGeometry(30,30,5,5);
-  var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
-  planeMat.side = THREE.DoubleSide;
-  planeMat.wireframe = true;
-  var plane = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(plane);
+ 
+//-----------------------------------------------------------
+function circleGeom_init(){
+  //半径1  分段数量3 8   起始角度0    中心角 2pi   
+  var circleGeom =new THREE.CircleGeometry(4,10,0,Math.PI * 2);
+  var circleMat =new THREE.MeshBasicMaterial({color:0x00ff00});
+  var circleMesh =new THREE.Mesh(circleGeom,circleMat);
+  scene.add(circleMesh);
 }
 
+function ringGeom_init(){
+//半径0.5  外半径1    圆环分段   圆环长度   起始角度   圆心角 
+  var ringGeom =new THREE.RingGeometry(3,4,8,8,0, Math.PI *2);
+  var ringMat =new THREE.MeshBasicMaterial({color:0x00ff00});
+  var ringMesh =new THREE.Mesh(ringGeom,ringMat);
+  scene.add(ringMesh);
+}
 
 //-----------------------------------------------------------
 
@@ -106,70 +111,73 @@ var axes=axes_init();
 // var mesh = box_init();
 // var plane  =plane_init();
 var ambientLight = ambientLight_init();
-var spotLight = spotLight_init();
-var planeGeom = planeGeom_init();
-
+var spotLight = spotLight_init(); 
+var circleGeom = circleGeom_init();
+var ringGeom = ringGeom_init();
 //-----------------------------------------------------------
 
 var gui = new dat.GUI(); 
 //------------------------------------------------------------------
-//环境光控制  
-var planeFolder = gui.addFolder("planeFolder");
-var planeProperty= new function () {
-  this.width = 30;
-  this.height = 43;
-  this.widthSegments = 3;
-  this.heightSegments =8;
-};   
-planeFolder.add(planeProperty, 'width',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(
-    // planeProperty.width,
-    prop,
-    planeProperty.height,planeProperty.widthSegments,planeProperty.height);
+var circleGeomFolder= gui.addFolder("circleGeomFolder");
+var circleProperty= new function () {
+  this.radius = 3;
+  this.segments = 10;
+  this.angleSt = 0;
+  this.angleCenter= Math.PI *2;
+}
+circleGeomFolder.add(circleProperty, 'radius',3,50).onChange(porp=>{
+  scene.remove(circleGeom);
+  circleGeom = new THREE.CircleGeometry(
+    // circleProperty.radius,
+    porp,
+    circleProperty.segments,
+    circleProperty.angleSt,
+    circleProperty.angleCenter);
   var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
   planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.width = w;
-});    
-planeFolder.add(planeProperty, 'height',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,
-    // planeProperty.height,
-    prop,
-    planeProperty.widthSegments,planeProperty.height);
+  circleGeom = new THREE.Mesh(circleGeom,planeMat);
+  scene.add(circleGeom); 
+});  
+circleGeomFolder.add(circleProperty, 'segments',3,50).onChange(porp=>{
+  scene.remove(circleGeom);
+  circleGeom = new THREE.CircleGeometry(
+    circleProperty.radius,
+    porp,
+    // circleProperty.segments,
+    circleProperty.angleSt,
+    circleProperty.angleCenter);
   var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
   planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.height = w;
-});    
-planeFolder.add(planeProperty, 'widthSegments',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,planeProperty.height,
-    // planeProperty.widthSegments,
-    prop,
-    planeProperty.height);
+  circleGeom = new THREE.Mesh(circleGeom,planeMat);
+  scene.add(circleGeom); 
+});
+circleGeomFolder.add(circleProperty, 'angleSt',3,50).onChange(porp=>{
+  scene.remove(circleGeom);
+  circleGeom = new THREE.CircleGeometry(
+    circleProperty.radius,   
+    circleProperty.segments,
+    // circleProperty.angleSt,
+    porp,
+    circleProperty.angleCenter);
   var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
   planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.widthSegments = w;
-});    
-planeFolder.add(planeProperty, 'heightSegments',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,planeProperty.height,planeProperty.widthSegments,
-    prop,
-    // planeProperty.height
+  circleGeom = new THREE.Mesh(circleGeom,planeMat);
+  scene.add(circleGeom); 
+});
+circleGeomFolder.add(circleProperty, 'angleCenter',3,50).onChange(porp=>{
+  scene.remove(circleGeom);
+  circleGeom = new THREE.CircleGeometry(
+    circleProperty.radius,  
+    circleProperty.segments,
+    circleProperty.angleSt,
+    // circleProperty.angleCenter
+    porp,
     );
   var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
   planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.heightSegments = w;
-});    
-
+  circleGeom = new THREE.Mesh(circleGeom,planeMat);
+  scene.add(circleGeom); 
+});
 //-----------------------------------------------------------
 
  
