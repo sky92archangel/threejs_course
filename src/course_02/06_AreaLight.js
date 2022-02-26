@@ -109,37 +109,45 @@ var floor = floor_init();
 var gui = new dat.GUI(); 
 //------------------------------------------------------------------
 //环境光控制  
-var ambientLightFolder = gui.addFolder("ambientLightGroup");
-var ambientLightProperty= new function () {
-  this.intensity = 0.02;
-  this.ambientColor = 0x3462343;
-};   
-ambientLightFolder.add(ambientLightProperty, 'intensity',0,5).onChange(intensity=>{
-  ambientLight.intensity = intensity;
-});    
-ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=>{
-  console.log(clr);
-  ambientLight.color = new THREE.Color(clr);
-});   
+{
+  var ambientLightFolder = gui.addFolder("ambientLightGroup");
+  var ambientLightProperty= new function () {
+    this.intensity = 0.02;
+    this.ambientColor = 0x3462343;
+  };   
+  ambientLightFolder.add(ambientLightProperty, 'intensity',0,5).onChange(intensity=>{
+    ambientLight.intensity = intensity;
+  });    
+  ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=>{
+    console.log(clr);
+    ambientLight.color = new THREE.Color(clr);
+  }); 
+}
 //------------------------------------------------------------------
-var areaLightFolder = gui.addFolder("areaLightFolder");
-var areaLightPorperty= new function () {
-  this.intensity = 0.02;
-  this.areaColor = 0x3462343;
-  this.areaWidth = 10;
-};   
-areaLightFolder.add(areaLightPorperty, 'intensity',0,50).onChange(intensity=>{
-  rectLight.intensity = intensity;
-});    
-areaLightFolder.addColor(areaLightPorperty, 'areaColor' ).onChange(clr=>{
-  console.log(clr);
-  rectLight.color = new THREE.Color(clr);
-});   
-areaLightFolder.add(areaLightPorperty, 'areaWidth',0,100).onChange(w=>{
-  rectLight.width = w;
-});  
+//面光控制 
+{
+  var areaLightFolder = gui.addFolder("areaLightFolder");
+  var areaLightPorperty= new function () {
+    this.intensity = 0.02;
+    this.areaColor = 0x3462343;
+    this.areaWidth = 10;
+  };   
+  areaLightFolder.add(areaLightPorperty, 'intensity',0,50).onChange(intensity=>{
+    rectLight.intensity = intensity;
+  });    
+  areaLightFolder.addColor(areaLightPorperty, 'areaColor' ).onChange(clr=>{
+    console.log(clr);
+    rectLight.color = new THREE.Color(clr);
+  });   
+  areaLightFolder.add(areaLightPorperty, 'areaWidth',0,100).onChange(w=>{
+    rectLight.width = w;
+  }); 
+}
+//------------------------------------------------------------------
+
 var rectLightHelper = new RectAreaLightHelper( rectLight );
 scene.add( rectLightHelper );
+
 //------------------------------------------------------------------
 resize();
 animate();

@@ -146,115 +146,126 @@ var hemisphereLight = hemisphereLight_init();
 var gui = new dat.GUI(); 
 //------------------------------------------------------------------
 //环境光控制  
-var ambientLightFolder = gui.addFolder("ambientLightGroup");
-var ambientLightProperty= new function () {
-  this.intensity = 0.02;
-  this.ambientColor = 0x3462343;
-};   
-ambientLightFolder.add(ambientLightProperty, 'intensity',0,5).onChange(intensity=>{
-  ambientLight.intensity = intensity;
-});    
-ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=>{
-  console.log(clr);
-  ambientLight.color = new THREE.Color(clr);
-});   
+{
+  var ambientLightFolder = gui.addFolder("ambientLightGroup");
+  var ambientLightProperty= new function () {
+    this.intensity = 0.02;
+    this.ambientColor = 0x3462343;
+  };   
+  ambientLightFolder.add(ambientLightProperty, 'intensity',0,5).onChange(intensity=>{
+    ambientLight.intensity = intensity;
+  });    
+  ambientLightFolder.addColor(ambientLightProperty, 'ambientColor' ).onChange(clr=>{
+    console.log(clr);
+    ambientLight.color = new THREE.Color(clr);
+  });   
+}
 //------------------------------------------------------------------
 //聚光灯控制
-var spotLightFolder = gui.addFolder("spotLightGroup");
-var spotLightProperty= new function () {
-  this.spotIntensity = 0.02;
-  this.spotColor = 0x000FF0;
-  this.spotDistance = 0 ;
-  this.spotAngle = Math.PI*0.3;
-  this.spotPenumbra = 0;
-  this.spotDecay = 0;
-  this.spotVisibility = true;
-};  
-spotLightFolder.add(spotLightProperty, 'spotIntensity',0,5).onChange(intensity=>{
-  spotLight.intensity = intensity;
-});    
-spotLightFolder.addColor(spotLightProperty, 'spotColor' ).onChange(clr=>{
-  console.log(clr);
-  spotLight.color = new THREE.Color(clr);
-});  
-spotLightFolder.add(spotLightProperty, 'spotDistance',0,1000).onChange(dis=>{
-  spotLight.distance = dis;
-});  
-spotLightFolder.add(spotLightProperty, 'spotAngle',0,Math.PI*2).onChange(angle=>{
-  spotLight.angle = angle;
-});  
-spotLightFolder.add(spotLightProperty, 'spotPenumbra',0,1).onChange(pen=>{
-  spotLight.penumbra = pen;
-});  
-spotLightFolder.add(spotLightProperty, 'spotDecay',0,1).onChange(dec=>{
-  spotLight.decay = dec;
-});  
-spotLightFolder.add(spotLightProperty, 'spotVisibility').onChange(v=>{
-  spotLight.visible = v;
-});  
+{
+  var spotLightFolder = gui.addFolder("spotLightGroup");
+  var spotLightProperty= new function () {
+    this.spotIntensity = 0.02;
+    this.spotColor = 0x000FF0;
+    this.spotDistance = 0 ;
+    this.spotAngle = Math.PI*0.3;
+    this.spotPenumbra = 0;
+    this.spotDecay = 0;
+    this.spotVisibility = true;
+  };  
+  spotLightFolder.add(spotLightProperty, 'spotIntensity',0,5).onChange(intensity=>{
+    spotLight.intensity = intensity;
+  });    
+  spotLightFolder.addColor(spotLightProperty, 'spotColor' ).onChange(clr=>{
+    console.log(clr);
+    spotLight.color = new THREE.Color(clr);
+  });  
+  spotLightFolder.add(spotLightProperty, 'spotDistance',0,1000).onChange(dis=>{
+    spotLight.distance = dis;
+  });  
+  spotLightFolder.add(spotLightProperty, 'spotAngle',0,Math.PI*2).onChange(angle=>{
+    spotLight.angle = angle;
+  });  
+  spotLightFolder.add(spotLightProperty, 'spotPenumbra',0,1).onChange(pen=>{
+    spotLight.penumbra = pen;
+  });  
+  spotLightFolder.add(spotLightProperty, 'spotDecay',0,1).onChange(dec=>{
+    spotLight.decay = dec;
+  });  
+  spotLightFolder.add(spotLightProperty, 'spotVisibility').onChange(v=>{
+    spotLight.visible = v;
+  });  
+}
 //------------------------------------------------------------------
 //点光源控制
-var pointLightFolder = gui.addFolder("pointLightGroup");
-var pointLightProperty= new function () {
-  this.pointColor = 0xffffff; 
-  this.pointIntensity = 3;
-  this.pointDistance = 150;
-  this.pointDecay = 0.5;
-  this.pointVisibility = true;
-};  
-pointLightFolder.addColor(pointLightProperty, 'pointColor').onChange(clr=>{
-  console.log(clr);
-  pointLight.color = new THREE.Color(clr);
-});  
-pointLightFolder.add(pointLightProperty,'pointIntensity',0,10).onChange(ins=>{
-  pointLight.intensity = ins;
-});
-pointLightFolder.add(pointLightProperty,'pointDistance',0,200).onChange(dis=>{
-  pointLight.distance = dis;
-});
-pointLightFolder.add(pointLightProperty,'pointDecay',0,10).onChange(dec=>{
-  pointLight.decay = dec;
-});
-pointLightFolder.add(pointLightProperty,'pointVisibility').onChange(v=>{
-  pointLight.visible = v;
-});
+{
+  var pointLightFolder = gui.addFolder("pointLightGroup");
+  var pointLightProperty= new function () {
+    this.pointColor = 0xffffff; 
+    this.pointIntensity = 3;
+    this.pointDistance = 150;
+    this.pointDecay = 0.5;
+    this.pointVisibility = true;
+  };  
+  pointLightFolder.addColor(pointLightProperty, 'pointColor').onChange(clr=>{
+    console.log(clr);
+    pointLight.color = new THREE.Color(clr);
+  });  
+  pointLightFolder.add(pointLightProperty,'pointIntensity',0,10).onChange(ins=>{
+    pointLight.intensity = ins;
+  });
+  pointLightFolder.add(pointLightProperty,'pointDistance',0,200).onChange(dis=>{
+    pointLight.distance = dis;
+  });
+  pointLightFolder.add(pointLightProperty,'pointDecay',0,10).onChange(dec=>{
+    pointLight.decay = dec;
+  });
+  pointLightFolder.add(pointLightProperty,'pointVisibility').onChange(v=>{
+    pointLight.visible = v;
+  });
+}
 //------------------------------------------------------------------
 //平行光控制
-var directionLightFolder = gui.addFolder('directionLightGroup');
-var directionLightProperty = new function () {
-  this.directionColor = 0xff4422;
-  this.directionIntensity = 10;
-  this.directionVisibility = true;
+{
+  var directionLightFolder = gui.addFolder('directionLightGroup');
+  var directionLightProperty = new function () {
+    this.directionColor = 0xff4422;
+    this.directionIntensity = 10;
+    this.directionVisibility = true;
+  }
+  directionLightFolder.addColor(directionLightProperty,'directionColor').onChange(clr=>{
+    directionLight.color = new THREE.Color(clr);
+  });
+  directionLightFolder.add(directionLightProperty,'directionIntensity',0,10).onChange(ins=>{
+    directionLight.intensity = ins;
+  });
+  directionLightFolder.add(directionLightProperty,'directionVisibility',0,10).onChange(v=>{
+    directionLight.visible = v;
+  });
 }
-directionLightFolder.addColor(directionLightProperty,'directionColor').onChange(clr=>{
-  directionLight.color = new THREE.Color(clr);
-});
-directionLightFolder.add(directionLightProperty,'directionIntensity',0,10).onChange(ins=>{
-  directionLight.intensity = ins;
-});
-directionLightFolder.add(directionLightProperty,'directionVisibility',0,10).onChange(v=>{
-  directionLight.visible = v;
-});
 //------------------------------------------------------------------
-var hemisphereLightFolder =  gui.addFolder('hemisphereLightGroup');
-var hemisphereLightProperty = new function(){
-  this.hemiVisibility = true;
-  this.hemiSkyColor = 0xff4422;
-  this.hemiGroundColor = 0xff4422;
-  this.hemiIntensity = 1;  
+//半球光控制
+{
+  var hemisphereLightFolder =  gui.addFolder('hemisphereLightGroup');
+  var hemisphereLightProperty = new function(){
+    this.hemiVisibility = true;
+    this.hemiSkyColor = 0xff4422;
+    this.hemiGroundColor = 0xff4422;
+    this.hemiIntensity = 1;  
+  }
+  hemisphereLightFolder.add(hemisphereLightProperty,'hemiVisibility' ).onChange(v=>{
+    hemisphereLight.visible = v;
+  });
+  hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiSkyColor').onChange(clr=>{
+    hemisphereLight.color = new THREE.Color(clr);
+  });
+  hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiGroundColor').onChange(clr=>{
+    hemisphereLight.groundColor = new THREE.Color(clr);
+  });
+  hemisphereLightFolder.add(hemisphereLightProperty,'hemiIntensity' ,0,10).onChange(ins=>{
+    hemisphereLight.intensity = ins;
+  });
 }
-hemisphereLightFolder.add(hemisphereLightProperty,'hemiVisibility' ).onChange(v=>{
-  hemisphereLight.visible = v;
-});
-hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiSkyColor').onChange(clr=>{
-  hemisphereLight.color = new THREE.Color(clr);
-});
-hemisphereLightFolder.addColor(hemisphereLightProperty,'hemiGroundColor').onChange(clr=>{
-  hemisphereLight.groundColor = new THREE.Color(clr);
-});
-hemisphereLightFolder.add(hemisphereLightProperty,'hemiIntensity' ,0,10).onChange(ins=>{
-  hemisphereLight.intensity = ins;
-});
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
@@ -267,6 +278,7 @@ var pointLightHelper = new THREE.PointLightHelper(pointLight);
 scene.add(pointLightHelper);
 var directionLightHelper = new THREE.DirectionalLightHelper(directionLight,5);
 scene.add(directionLightHelper);
+
 //------------------------------------------------------------------
 resize();
 animate();

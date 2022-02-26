@@ -95,9 +95,9 @@ function planeGeom_init(){
   planeMat.wireframe = true;
   var plane = new THREE.Mesh(planeGeom,planeMat);
   scene.add(plane);
+  return plane;
 }
-
-
+ 
 //-----------------------------------------------------------
 
 var camera = camera_init();
@@ -109,70 +109,92 @@ var ambientLight = ambientLight_init();
 var spotLight = spotLight_init();
 var planeGeom = planeGeom_init();
 
-//-----------------------------------------------------------
-
+//----------------------------------------------------------- 
 var gui = new dat.GUI(); 
-//------------------------------------------------------------------
-//环境光控制  
-var planeFolder = gui.addFolder("planeFolder");
-var planeProperty= new function () {
-  this.width = 30;
-  this.height = 43;
-  this.widthSegments = 3;
-  this.heightSegments =8;
-};   
-planeFolder.add(planeProperty, 'width',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(
-    // planeProperty.width,
-    prop,
-    planeProperty.height,planeProperty.widthSegments,planeProperty.height);
-  var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
-  planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.width = w;
-});    
-planeFolder.add(planeProperty, 'height',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,
-    // planeProperty.height,
-    prop,
-    planeProperty.widthSegments,planeProperty.height);
-  var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
-  planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.height = w;
-});    
-planeFolder.add(planeProperty, 'widthSegments',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,planeProperty.height,
-    // planeProperty.widthSegments,
-    prop,
-    planeProperty.height);
-  var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
-  planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.widthSegments = w;
-});    
-planeFolder.add(planeProperty, 'heightSegments',0,50).onChange(prop=>{
-  scene.remove(planeGeom);
-  planeGeom = new THREE.PlaneGeometry(planeProperty.width,planeProperty.height,planeProperty.widthSegments,
-    prop,
-    // planeProperty.height
-    );
-  var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00});
-  planeMat.side = THREE.DoubleSide;
-  planeGeom = new THREE.Mesh(planeGeom,planeMat);
-  scene.add(planeGeom);
-  // planeGeom.heightSegments = w;
-});    
-
 //-----------------------------------------------------------
-
- 
+//平面控制
+{  
+  var position = planeGeom.position; 
+  var wireFrame = true;
+  var planeFolder = gui.addFolder("planeFolder");
+  var planeProperty= new function () {
+    this.width = 30;
+    this.height = 43;
+    this.widthSegments = 3;
+    this.heightSegments =8;
+    this.isWireFrame = true;
+  };   
+  planeFolder.add(planeProperty, 'width',0,50).onChange(prop=>{
+    scene.remove(planeGeom);
+    planeGeom = new THREE.PlaneGeometry(
+      // planeProperty.width,
+      prop,
+      planeProperty.height,planeProperty.widthSegments,planeProperty.height);
+    var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00,wireframe:wireFrame});
+    planeMat.side = THREE.DoubleSide;
+    planeGeom = new THREE.Mesh(planeGeom,planeMat);
+    scene.add(planeGeom);
+    planeGeom.position.set(position.x,position.y,position.z); 
+  });    
+  planeFolder.add(planeProperty, 'height',0,50).onChange(prop=>{
+    scene.remove(planeGeom);
+    planeGeom = new THREE.PlaneGeometry(
+      planeProperty.width,
+      // planeProperty.height,
+      prop,
+      planeProperty.widthSegments,
+      planeProperty.height);
+    var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00,wireframe:wireFrame});
+    planeMat.side = THREE.DoubleSide;
+    planeGeom = new THREE.Mesh(planeGeom,planeMat);
+    scene.add(planeGeom);
+    planeGeom.position.set(position.x,position.y,position.z); 
+  });    
+  planeFolder.add(planeProperty, 'widthSegments',0,50).onChange(prop=>{
+    scene.remove(planeGeom);
+    planeGeom = new THREE.PlaneGeometry(
+      planeProperty.width,
+      planeProperty.height,
+      // planeProperty.widthSegments,
+      prop,
+      planeProperty.height);
+    var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00,wireframe:wireFrame });
+    planeMat.side = THREE.DoubleSide;
+    planeGeom = new THREE.Mesh(planeGeom,planeMat);
+    scene.add(planeGeom);planeGeom.position.set(position.x,position.y,position.z);
+  });    
+  planeFolder.add(planeProperty, 'heightSegments',0,50).onChange(prop=>{
+    scene.remove(planeGeom);
+    planeGeom = new THREE.PlaneGeometry(
+      planeProperty.width,
+      planeProperty.height,
+      planeProperty.widthSegments,
+      prop,
+      // planeProperty.height
+      );
+    var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00,wireframe:wireFrame});
+    planeMat.side = THREE.DoubleSide;
+    planeGeom = new THREE.Mesh(planeGeom,planeMat);
+    scene.add(planeGeom);
+    planeGeom.position.set(position.x,position.y,position.z);
+  });    
+  planeFolder.add(planeProperty, 'isWireFrame').onChange(prop=>{
+    scene.remove(planeGeom);
+    planeGeom = new THREE.PlaneGeometry(
+      planeProperty.width, 
+      planeProperty.height,
+      planeProperty.widthSegments,
+      planeProperty.height);
+    var planeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00,wireframe:prop});
+    planeMat.side = THREE.DoubleSide;
+    planeGeom = new THREE.Mesh(planeGeom,planeMat);
+    scene.add(planeGeom);
+    planeGeom.position.set(position.x,position.y,position.z);  
+    wireFrame = prop;
+  });    
+}
+//-----------------------------------------------------------
+   
 resize();
 animate();
 window.addEventListener('resize', resize);
