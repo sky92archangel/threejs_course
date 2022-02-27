@@ -8,10 +8,7 @@ function ColorValueToColorArray(nColor, clrArray) {
     clrArray[1] = g / 255;
     clrArray[2] = b / 255;
 }
-
-
-
-
+ 
 class pgl_axes {
     constructor(gl, a_Position, a_Color, length, nXColors, nYColors, nZColors, dat_gui) {
         this.gl = gl;
@@ -65,8 +62,7 @@ class pgl_axes {
         this.gl.bufferData( this.gl.ARRAY_BUFFER, this.vertices,  this.gl.STATIC_DRAW);           //传入当前缓冲区
         this.gl.vertexAttribPointer( this.a_Position, 3,  this.gl.FLOAT, false,  this.FSIZE * 3, 0);   //传入shader
         this.gl.enableVertexAttribArray( this.a_Position);                                     //激活 
-  
-
+   
         this.gl.bindBuffer( this.gl.ARRAY_BUFFER, clrBuffer);
         this.gl.bufferData( this.gl.ARRAY_BUFFER, this.colors,  this.gl.STATIC_DRAW);
         this.gl.vertexAttribPointer( this.a_Color, 3,  this.gl.FLOAT, false,  this.FSIZE * 3, 0);

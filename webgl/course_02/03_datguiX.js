@@ -3,11 +3,11 @@
 import * as shaderText from './dot_shader.glsl.js';
 import dat from '../libs/dat.gui.module.js';
 
-var cvs = document.getElementById('canvas');
-
+var cvs = document.getElementById('canvas'); 
 const gl = cvs.getContext('webgl');
 
-
+//------------------------------------------------------------- 
+//#region 监听画布 
 //画布宽高
 cvs.width = window.innerWidth;
 cvs.height = window.innerHeight;
@@ -24,7 +24,9 @@ function resizeCanvas() {
 //背景
 gl.clearColor(0.5, 0.5, 0.3, 0.7);
 gl.clear(gl.COLOR_BUFFER_BIT); 
+//------------------------------------------------------------- 
 
+//#endregion 
 //------------------------------------------------------------- 
 //#region shdaer绘制
 //shdaer绘制
