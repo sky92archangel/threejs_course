@@ -2,7 +2,7 @@
 import * as THREE from '../../build/three.module.js';
 import { OrbitControls } from '../../jsm/controls/OrbitControls.js';
 // import * as Stats from "../../jsm/libs/stats.module.js";
-import _raycaster_ from './raycaster_class.js'; 
+import {_raycaster_} from './raycaster_class.js'; 
 // var raycaster_class = require('raycaster_class');
   
 
@@ -88,8 +88,9 @@ function spotLight_init() {
 }
 
 // import * from raycaster_class
-var _raycaster = new raycaster_class(container,scene,camera);
+var _raycaster = new _raycaster_(container,scene,camera);
 containerDom.onclick = _raycaster.raycaster_init
+containerDom.onmousemove = select_object;
 //----------------------------------------------------------------------
 containerDom.onclick = select_object;
 function select_object(e) {
