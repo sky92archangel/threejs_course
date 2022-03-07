@@ -92,8 +92,15 @@ var rawShaderMat = new THREE.RawShaderMaterial(
 );
 const shaderObject = new THREE.Mesh(torusGeometry, rawShaderMat);
 
-shaderObject.position.set(0, 0, 0);
+shaderObject.position.set(-10, 0, 0);
 scene.add(shaderObject);
+//=====================================================
+
+var geomSphere = new THREE.SphereGeometry(3,32,32); 
+const sphereObject = new THREE.Mesh(geomSphere, rawShaderMat);
+sphereObject.position.set(0, 0, 0);
+scene.add(sphereObject);
+
 //=====================================================
 
 resize();
