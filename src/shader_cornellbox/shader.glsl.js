@@ -33,34 +33,42 @@ export const fragment = /*glsl*/`
     uniform float time;
     uniform float ambientRatio;
     uniform float speculerRatio;
+    uniform float powRatio;
     uniform float diffuseRatio;
+    uniform vec3 viewPos;
+   
 
-    vec3 lightPos;
-    vec3 lightColor;
+    uniform vec3 lightPos;
+    uniform  vec3 lightColor;
 
     varying vec3 objectNormal;
 
     varying vec3 vPosition;
     varying vec4 vColor;
 
-    void main(){
- 
-      
+    void main(){ 
         vec4 color=vec4(vColor);
 
-        //color.r += sin(vPosition.x*10.0+time)*0.5 ;
-
-        lightPos = vec3(20.0,20.0,20.0);
-        lightColor = vec3(1.0,1.0,1.0);
-        vec3 norm = normalize(objectNormal);
+        //color.r += sin(vPosition.x*10.0+time)*0.5 ; 
+        // lightPos = vec3(20.0,20.0,20.0);
+        // lightColor = vec3(1.0,1.0,1.0);
         vec3 lightDir = normalize(lightPos - vPosition);
-
+        vec3 norm = normalize(objectNormal); 
+        //================================================================
         float diff = max(dot(norm, lightDir), 0.0);
-        vec3 diffuse =diffuseRatio * diff * lightColor;
-  
-        vec4 ambient = ambientRatio * color;
-
-        gl_FragColor = ambient +vec4(diffuse,1.0) ;
+        vec3 diffuse =diffuseRatio * diff * lightColor; 
+        //================================================================ 
+        vec3 viewDir = normalize(viewPos - vPosition);
+        vec3 reflectDir = reflect(-lightDir, norm);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0),powRatio); 
+        vec3 specular = speculerRatio * spec * lightColor; 
+        //================================================================
+        vec4 ambient = ambientRatio * color * vec4(lightColor,1.0) ;
+        //================================================================
+        gl_FragColor = 
+            ambient +
+            vec4(diffuse,1.0)+
+            vec4(specular,1.0) ;
     }
 `;
 

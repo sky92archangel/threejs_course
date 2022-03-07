@@ -44,15 +44,15 @@ scene.add(ambientLight);
 var controls = new OrbitControls(camera, renderer.domElement);
 
 
-document.onkeydown = function (event) {
+// document.onkeydown = function (event) {
 
-  switch (event.key) {
-    case 'w': controls.moveForward(0.5); break;
-    case 's': controls.moveForward(-0.5); break;
-    case 'a': controls.moveRight(-0.5); break;
-    case 'd': controls.moveRight(0.5); break;
-  }
-}
+//   switch (event.key) {
+//     case 'w': controls.moveForward(0.5); break;
+//     case 's': controls.moveForward(-0.5); break;
+//     case 'a': controls.moveRight(-0.5); break;
+//     case 'd': controls.moveRight(0.5); break;
+//   }
+// }
 
 // Add axes
 var axes = new THREE.AxisHelper(50);
@@ -73,17 +73,23 @@ scene.add(makeSkybox([
   '../../texture/skybox/nz.png', // front
 ], 5000));
 
-
+console.log(camera.position)
 //=====================================================
-var lightPos= new Float32Array([1.0, 1.0, 1.0, 1.0])
+var lightPos=new THREE.Vector3(20,20,20); 
+var lightColor=new THREE.Vector3(1.0,1.0,1.0); 
+ 
 var rawShaderMat = new THREE.RawShaderMaterial(
   {
     uniforms: {
       time: { value: 1.0 },
       ambientRatio:{value:0.5},
       diffuseRatio:{value:0.5},
-      speculerRatio:{value:0.5}, 
-      // lightPos:{value:lightPos},
+      speculerRatio:{value:0.5},  
+      powRatio:{value:32.0},  
+      lightPos:{value:lightPos},
+      lightColor:{value:lightColor},
+      viewPos:{value:camera.position}, 
+
     },
 
     vertexShader: shaderText.vertex,
@@ -164,7 +170,14 @@ var gui = new dat.GUI();
     this.shaderTime = 1.0; 
     this.ambientRatio = 0.8;
     this.speculerRatio=0.2;
+    this.powRatio = 32.0;
     this.diffuseRatio =0.5;
+
+    this.lightColor = 0xff00ff,
+
+    this.lightPosX = 20;
+    this.lightPosY = 20;
+    this.lightPosZ = 20;
   };  
   shaderFolder.add(shaderProperty, 'shaderTime',0.1,10.0).onChange(value=>{
     rawShaderMat.uniforms.time.value  = 20*value; 
@@ -177,5 +190,24 @@ var gui = new dat.GUI();
   });
   shaderFolder.add(shaderProperty, 'diffuseRatio',0.0,1.0).onChange(value=>{
     rawShaderMat.uniforms.diffuseRatio.value  = value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'powRatio',0.0,32.0).onChange(value=>{
+    rawShaderMat.uniforms.powRatio.value  = value; 
+  }); 
+
+  shaderFolder.addColor(shaderProperty, 'lightColor').onChange(value=>{
+    rawShaderMat.uniforms.lightColor.value = new THREE.Color(value);; 
+  }); 
+
+
+  shaderFolder.add(shaderProperty, 'lightPosX',0.0,50.0).onChange(value=>{
+    rawShaderMat.uniforms.lightPos[0].value  = value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'lightPosY',0.0,50.0).onChange(value=>{
+    rawShaderMat.uniforms.lightPos[1].value  = value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'lightPosZ',0.0,50.0).onChange(value=>{
+    var lpos=new THREE.Vector3(shaderProperty.lightPosX,shaderProperty.lightPosY,value); 
+    rawShaderMat.uniforms.lightPos=lpos  ; 
   }); 
 }
