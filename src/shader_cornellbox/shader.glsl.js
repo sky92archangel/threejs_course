@@ -9,10 +9,17 @@ export const vertex = /*glsl*/`
     attribute vec3 position;
     attribute vec4 color;
 
+    attribute vec3 normal; 
+    varying vec3 objectNormal;
+
+
     varying vec3 vPosition;
     varying vec4 vColor;
 
+    // out vec3 Normal;
+
     void main() {
+        objectNormal = vec3(normal);
         vPosition = position;
         vColor=color;
         gl_Position = projectionMatrix * modelViewMatrix*vec4(position,1.0);
@@ -28,6 +35,10 @@ export const fragment = /*glsl*/`
     uniform float speculerRatio;
     uniform float diffuseRatio;
 
+    uniform vec3 lightPos;
+
+    varying vec3 objectNormal;
+
     varying vec3 vPosition;
     varying vec4 vColor;
 
@@ -36,6 +47,8 @@ export const fragment = /*glsl*/`
         vec4 color=vec4(vColor);
 
         //color.r += sin(vPosition.x*10.0+time)*0.5 ;
+
+        vec3 norm = normalize(objectNormal);
   
         vec4 ambient = ambientRatio * color;
 
