@@ -1,7 +1,8 @@
 
 //16进制颜色 转换 为rbg
-import  {ColorValueToColorArray} from './transformer.js' 
- class pgl_axes {
+import { ColorValueToColorArray } from './transformer.js'
+
+class pgl_axes {
     constructor(gl, a_Position, a_Color, length, nXColors, nYColors, nZColors, dat_gui) {
         this.gl = gl;
         this.a_Position = a_Position;
@@ -20,9 +21,9 @@ import  {ColorValueToColorArray} from './transformer.js'
         };
 
         this.vertices = new Float32Array([
-            0, 0, 0,  this.axesCtrlObj.length, 0, 0,
-            0, 0, 0, 0,  this.axesCtrlObj.length, 0,
-            0, 0, 0, 0, 0,  this.axesCtrlObj.length,
+            0, 0, 0, this.axesCtrlObj.length, 0, 0,
+            0, 0, 0, 0, this.axesCtrlObj.length, 0,
+            0, 0, 0, 0, 0, this.axesCtrlObj.length,
         ]);
 
         var clrArrayX = new Float32Array([1.0, 1.0, 1.0, 1.0]);
@@ -49,21 +50,21 @@ import  {ColorValueToColorArray} from './transformer.js'
     }
 
     draw() {
-       
-        this.gl.bindBuffer( this.gl.ARRAY_BUFFER, this.vBuffer);                            //把缓冲区绑定到全局数据上
-        this.gl.bufferData( this.gl.ARRAY_BUFFER, this.vertices,  this.gl.STATIC_DRAW);           //传入当前缓冲区
-        this.gl.vertexAttribPointer( this.a_Position, 3,  this.gl.FLOAT, false,  this.FSIZE * 3, 0);   //传入shader
-        this.gl.enableVertexAttribArray( this.a_Position);                                     //激活 
-   
-        this.gl.bindBuffer( this.gl.ARRAY_BUFFER, this.clrBuffer);
-        this.gl.bufferData( this.gl.ARRAY_BUFFER, this.colors,  this.gl.STATIC_DRAW);
-        this.gl.vertexAttribPointer( this.a_Color, 3,  this.gl.FLOAT, false,  this.FSIZE * 3, 0);
-        this.gl.enableVertexAttribArray( this.a_Color);
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vBuffer);                            //把缓冲区绑定到全局数据上
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertices, this.gl.STATIC_DRAW);           //传入当前缓冲区
+        this.gl.vertexAttribPointer(this.a_Position, 3, this.gl.FLOAT, false, this.FSIZE * 3, 0);   //传入shader
+        this.gl.enableVertexAttribArray(this.a_Position);                                     //激活 
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.clrBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.colors, this.gl.STATIC_DRAW);
+        this.gl.vertexAttribPointer(this.a_Color, 3, this.gl.FLOAT, false, this.FSIZE * 3, 0);
+        this.gl.enableVertexAttribArray(this.a_Color);
 
         this.gl.drawArrays(this.gl.LINES, 0, 6);  // 要绘制的内容    顶点起始位置   需要绘制的顶点个数
     }
-  
+
 }
 
 
-export {pgl_axes}
+export { pgl_axes }

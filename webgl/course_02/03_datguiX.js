@@ -2,8 +2,10 @@
 
 import * as shaderText from './dot_shader.glsl.js';
 import dat from '../libs/dat.gui.module.js';
+import  {ColorValueToColorArray} from './transformer.js' 
+import { pgl_axes } from './axes.js'
 
-var cvs = document.getElementById('canvas'); 
+var cvs = document.getElementById('canvas');
 const gl = cvs.getContext('webgl');
 
 //------------------------------------------------------------- 
@@ -22,24 +24,22 @@ function resizeCanvas() {
 }
 
 //背景
-gl.clearColor(0.5, 0.5, 0.3, 0.7);
-gl.clear(gl.COLOR_BUFFER_BIT); 
-//------------------------------------------------------------- 
-
+gl.clearColor(0.5, 0.8, 0.8, 0.7);
+gl.clear(gl.COLOR_BUFFER_BIT);
 //#endregion 
-//------------------------------------------------------------- 
+//-------------------------------------------------------------   
 //#region shdaer绘制
 //shdaer绘制
 // var vshader_src = document.getElementById('vshader_src').innerHTML;
 // var fshader_src = document.getElementById('fshader_src').innerHTML;
 var vshader_src = shaderText.vertex;
-var fshader_src = shaderText.fragment; 
+var fshader_src = shaderText.fragment;
 function shader_init(vshader_src, fshader_src) {
- 
+
     var vshader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vshader, vshader_src);
     gl.compileShader(vshader);
- 
+
     var fshader = gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(fshader, fshader_src);
     gl.compileShader(fshader);
@@ -51,82 +51,84 @@ function shader_init(vshader_src, fshader_src) {
     gl.useProgram(program);
     return program;
 }
-var glProgram=shader_init(vshader_src,fshader_src); 
-//#endregion
-//-------------------------------------------------------------
-// var axesCtrlObj = new function () {
-//     this.length = 5;
-//     this.xColor = 0xff0000;
-//     this.yColor = 0x00ff00;
-//     this.zColor = 0x0000ff;
-// }
+var glProgram = shader_init(vshader_src, fshader_src);
+//#endregion  
+//------------------------------------------------------------- 
+
+//轴属性   用于动态控制
 var axesCtrlObj = {
     length: 50,
     xColor: 0xff0000,
     yColor: 0x00ff00,
     zColor: 0x0000ff,
+   // colors:[ 0xff0000,  0x00ff00, 0x0000ff ]
 }
+var colors = [axesCtrlObj .xColor,axesCtrlObj .yColor,axesCtrlObj .zColor];
 
-var a_Position = gl.getAttribLocation(glProgram, 'a_Position');
+var a_Position = gl.getAttribLocation(glProgram, 'a_Position');   //将顶点传给shader
 var a_Color = gl.getAttribLocation(glProgram, 'a_Color');
 
-var axesVertices = new Float32Array([
-    0, 0, 0, axesCtrlObj, 0, 0,
-    0, 0, 0, 0, axesCtrlObj, 0,
-    0, 0, 0, 0, 0, axesCtrlObj,
-]);
+var axes = new pgl_axes(gl, a_Position, a_Color, 5, 
+    axesCtrlObj.xColor,  axesCtrlObj.yColor,  axesCtrlObj.zColor,  gui)
 
-var axesColors = new Float32Array([
-    1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-    0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-]);
-
-var FSIZE = axesVertices.BYTES_PER_ELEMENT;  //当前系统浮点占用的字节数
-
-var vAxesBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, vAxesBuffer);                            //把缓冲区绑定到全局数据上
-gl.bufferData(gl.ARRAY_BUFFER, axesVertices, gl.STATIC_DRAW);           //传入当前缓冲区
-gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 3, 0);   //传入shader
-gl.enableVertexAttribArray(a_Position);                                 //激活 
-
-console.log(a_Position);
-
-var CSIZE = axesColors.BYTES_PER_ELEMENT;
-var clrBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, clrBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, axesColors, gl.STATIC_DRAW);
-gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, CSIZE * 3, 0);
-gl.enableVertexAttribArray(a_Color);
-
-gl.drawArrays(gl.LINES, 0, 6);  // 要绘制的内容    顶点起始位置   需要绘制的顶点个数
-//-------------------------------
-
-
-//gl.drawArrays(gl.POINTS, 0, 1);
+axes.draw();
+  
 
 var gui = new dat.GUI();
 
 //控制背景色
+var backgroundObj = new function () {
+    this.backColor = 0xffffff;
+}
 {
-    var backgroundObj = new function () {
-        this.backColor = 0xffffff;
-    }
+    // var backgroundObj = new function () {
+    //     this.backColor = 0xffffff;
+    // }
     var backgroundFolder = gui.addFolder("backgroundFolder");
     backgroundFolder.addColor(backgroundObj, 'backColor').onChange((value) => {
 
-        var r = (value & 0xff0000) >> 16;
-        var g = (value & 0xff00) >> 8;
-        var b = (value & 0xff);
+        ColorValueToColorArray(value,clrArray)
+        gl.clearColor(clrArray[0],clrArray[1],clrArray[2], clrArray[3]);
+        gl.clear(gl.COLOR_BUFFER_BIT); 
 
-        gl.clearColor(r / 255, g / 255, b / 255, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        //gl.drawArrays(gl.POINTS, 0, 1);
+        axes.draw();  
+    }); 
+}
 
-    });
+{
+    var axesColorFolder = gui.addFolder("axesColorFolder");
+    axesColorFolder.addColor(axesCtrlObj, 'xColor').onChange((value) => {
+
+        // ColorValueToColorArray(value,clrArray)
+        // // gl.clearColor(clrArray[0],clrArray[1],clrArray[2], clrArray[3]);
+        // // gl.clear(gl.COLOR_BUFFER_BIT); 
+
+        // var  cArray  = new Float32Array([clrArray[0],clrArray[1], clrArray[2], clrArray[3] ]);
+        // var axes = new pgl_axes(gl, a_Position, a_Color, 5, 
+        //     cArray,  axesCtrlObj.yColor,  axesCtrlObj.zColor,  gui)
+        // axes.draw();  
+    }); 
+}
+
+var clrArray  = new Float32Array([1.0, 1.0, 1.0, 1.0]);
+function draw() {
+ 
+    ColorValueToColorArray(backgroundObj.backColor,clrArray);
+
+    gl.clearColor(clrArray[0],clrArray[1],clrArray[2], clrArray[3]);
+    gl.clear(gl.COLOR_BUFFER_BIT); 
+ 
+    // var cArray  = new Float32Array([clrArray[0],clrArray[1], clrArray[2], clrArray[3] ]);
+    var axes = new pgl_axes(gl, a_Position, a_Color, 5, 
+        axesCtrlObj.xColor,  axesCtrlObj.yColor,  axesCtrlObj.zColor,  gui)
+
+    axes.draw();
 
 }
 
+renderScene();
 
-
-
+function renderScene(){
+    draw();
+    requestAnimationFrame(renderScene);    
+}
