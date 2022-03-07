@@ -83,7 +83,7 @@ var rawShaderMat = new THREE.RawShaderMaterial(
       ambientRatio:{value:0.5},
       diffuseRatio:{value:0.5},
       speculerRatio:{value:0.5}, 
-      lightPos:{value:lightPos},
+      // lightPos:{value:lightPos},
     },
 
     vertexShader: shaderText.vertex,
