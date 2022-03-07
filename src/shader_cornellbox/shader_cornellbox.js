@@ -78,7 +78,10 @@ scene.add(makeSkybox([
 var rawShaderMat = new THREE.RawShaderMaterial(
   {
     uniforms: {
-      time: { value: 1.0 }
+      time: { value: 1.0 },
+      ambientRatio:{value:0.5},
+      diffuseRatio:{value:0.5},
+      speculerRatio:{value:0.5}, 
     },
 
     vertexShader: shaderText.vertex,
@@ -150,16 +153,26 @@ function makeSkybox(urls, size) {
   // scene.add( skyBox );//在场景中加入天空盒
 }
 
-
-
+ 
 
 var gui = new dat.GUI(); 
 {
   var shaderFolder = gui.addFolder("shaderFolder");
   var shaderProperty= new function () {
     this.shaderTime = 1.0; 
+    this.ambientRatio = 0.8;
+    this.speculerRatio=0.2;
   };  
-  shaderFolder.add(shaderProperty, 'shaderTime',0.1,10.0).onChange(t=>{
-    rawShaderMat.uniforms.time.value  = 20*t; 
+  shaderFolder.add(shaderProperty, 'shaderTime',0.1,10.0).onChange(value=>{
+    rawShaderMat.uniforms.time.value  = 20*value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'ambientRatio',0.0,1.0).onChange(value=>{
+    rawShaderMat.uniforms.ambientRatio.value  = value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'speculerRatio',0.0,1.0).onChange(value=>{
+    rawShaderMat.uniforms.speculerRatio.value  = value; 
+  });
+  shaderFolder.add(shaderProperty, 'diffuseRatio',0.0,1.0).onChange(value=>{
+    rawShaderMat.uniforms.diffuseRatio.value  = value; 
   }); 
 }

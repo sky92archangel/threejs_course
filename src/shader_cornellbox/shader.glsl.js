@@ -24,13 +24,21 @@ export const fragment = /*glsl*/`
     precision mediump int;
 
     uniform float time;
+    uniform float ambientRatio;
+    uniform float speculerRatio;
+    uniform float diffuseRatio;
 
     varying vec3 vPosition;
     varying vec4 vColor;
 
     void main(){
+ 
         vec4 color=vec4(vColor);
-        color.r += sin(vPosition.x*10.0+time)*0.5 ;
-        gl_FragColor = color;
+
+        //color.r += sin(vPosition.x*10.0+time)*0.5 ;
+  
+        vec4 ambient = ambientRatio * color;
+
+        gl_FragColor = ambient;
     }
 `;
