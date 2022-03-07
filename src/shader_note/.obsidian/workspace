@@ -1,0 +1,93 @@
+{
+  "main": {
+    "id": "3791218f17ca9534",
+    "type": "split",
+    "children": [
+      {
+        "id": "c3efc3c1a1eac7b7",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "传统渲染与光线追踪.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c0dc2a2f13ade24c",
+    "type": "split",
+    "children": [
+      {
+        "id": "c46dfd0f7b90aec1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5da52b670ae1cf44",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "0ed8696cc86979b3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "445a40a1f45aa2ac",
+    "type": "split",
+    "children": [
+      {
+        "id": "46fbef0f68570606",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d48595aa03767939",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "传统渲染与光线追踪.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "c3efc3c1a1eac7b7",
+  "lastOpenFiles": [
+    "传统渲染与光线追踪.md"
+  ]
+}
