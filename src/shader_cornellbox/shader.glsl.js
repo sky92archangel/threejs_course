@@ -52,6 +52,7 @@ export const fragment = /*glsl*/`
         // color.r += sin(vPosition.x*10.0+time)*0.5 ; 
         // lightPos = vec3(20.0,20.0,20.0);
         // lightColor = vec3(1.0,1.0,1.0);
+        
         vec3 lightDir = normalize(lightPos - vPosition);
         vec3 norm = normalize(objectNormal); 
         //================================================================
