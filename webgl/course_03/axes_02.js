@@ -2,21 +2,21 @@
 //16进制颜色 转换 为rbg
 import  {ColorValueToColorArray} from './transformer.js' 
  class pgl_axes {
-    constructor(gl, a_Position, a_Color, length, nXColors, nYColors, nZColors, dat_gui) {
+    constructor(gl, a_Position, a_Color, length, nColors, dat_gui) {
         this.gl = gl;
         this.a_Position = a_Position;
         this.a_Color = a_Color;
         this.length = length;
-        this.nXColors = nXColors;
-        this.nYColors = nYColors;
-        this.nZColors = nZColors;
+        this.nXColors = nColors[0];
+        this.nYColors = nColors[1];
+        this.nZColors = nColors[2];
         this.dat_gui = dat_gui;
 
         this.axesCtrlObj = {
-            length: length,
-            xColor: nXColors,
-            yColor: nYColors,
-            zColor: nZColors,
+            length: this.length,
+            xColor: this.nXColors,
+            yColor: this.nYColors,
+            zColor: this.nZColors,
         };
 
         this.vertices = new Float32Array([
@@ -28,9 +28,9 @@ import  {ColorValueToColorArray} from './transformer.js'
         var clrArrayX = new Float32Array([1.0, 1.0, 1.0, 1.0]);
         var clrArrayY = new Float32Array([1.0, 1.0, 1.0, 1.0]);
         var clrArrayZ = new Float32Array([1.0, 1.0, 1.0, 1.0]);
-        ColorValueToColorArray(nXColors, clrArrayX);
-        ColorValueToColorArray(nYColors, clrArrayY);
-        ColorValueToColorArray(nZColors, clrArrayZ);
+        ColorValueToColorArray(this.axesCtrlObj.xColor, clrArrayX);
+        ColorValueToColorArray(this.axesCtrlObj.yColor, clrArrayY);
+        ColorValueToColorArray(this.axesCtrlObj.zColor, clrArrayZ);
 
         this.colors = new Float32Array([
             clrArrayX[0], clrArrayX[1], clrArrayX[2], clrArrayX[0], clrArrayX[1], clrArrayX[2],
@@ -61,6 +61,7 @@ import  {ColorValueToColorArray} from './transformer.js'
         this.gl.enableVertexAttribArray( this.a_Color);
 
         this.gl.drawArrays(this.gl.LINES, 0, 6);  // 要绘制的内容    顶点起始位置   需要绘制的顶点个数
+ 
     }
   
 }
