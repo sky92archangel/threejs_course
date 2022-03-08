@@ -84,12 +84,12 @@ var rawShaderMat = new THREE.RawShaderMaterial(
       time: { value: 1.0 },
       ambientRatio:{value:0.5},
       diffuseRatio:{value:0.5},
+      diffuseCut:{value:0.1},
       speculerRatio:{value:0.5},  
       powRatio:{value:32.0},  
       lightPos:{value:pointLight.position},
       lightColor:{value:pointLight.color},
-      viewPos:{value:camera.position}, 
-
+      viewPos:{value:camera.position},  
     },
 
     vertexShader: shaderText.vertex,
@@ -171,7 +171,8 @@ var gui = new dat.GUI();
     this.ambientRatio = 0.8;
     this.speculerRatio=0.2;
     this.powRatio = 2.0;
-    this.diffuseRatio =0.5;
+    this.diffuseRatio = 0.5 ;
+    this.diffuseCut = 0.2;
 
     this.lightColor = 0xff00ff,
 
@@ -190,6 +191,9 @@ var gui = new dat.GUI();
   });
   shaderFolder.add(shaderProperty, 'diffuseRatio',0.0,1.0).onChange(value=>{
     rawShaderMat.uniforms.diffuseRatio.value  = value; 
+  }); 
+  shaderFolder.add(shaderProperty, 'diffuseCut',0.0,1.0).onChange(value=>{
+    rawShaderMat.uniforms.diffuseCut.value  = value; 
   }); 
   shaderFolder.add(shaderProperty, 'powRatio',0.0,8.0).onChange(value=>{
     rawShaderMat.uniforms.powRatio.value  = value; 
