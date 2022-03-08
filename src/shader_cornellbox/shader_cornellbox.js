@@ -73,7 +73,7 @@ scene.add(makeSkybox([
   '../../texture/skybox/nz.png', // front
 ], 5000));
 
-console.log(camera.position)
+
 //=====================================================
 // var lightPos=new THREE.Vector3(20,20,20); 
 var lightColor=new THREE.Vector3(1.0,1.0,1.0); 
@@ -203,13 +203,13 @@ var gui = new dat.GUI();
     rawShaderMat.uniforms.lightColor.value = new THREE.Color(value);; 
   }); 
  
-  shaderFolder.add(shaderProperty, 'lightPosX',0.0,50.0).onChange(value=>{
-    rawShaderMat.uniforms.lightPos.value[0]  = value; 
+  shaderFolder.add(shaderProperty, 'lightPosX',-50.0,50.0).onChange(value=>{
+    rawShaderMat.uniforms.lightPos.value.x  = value; 
   }); 
-  shaderFolder.add(shaderProperty, 'lightPosY',0.0,50.0).onChange(value=>{
-    rawShaderMat.uniforms.lightPos.value[1]  = value; 
+  shaderFolder.add(shaderProperty, 'lightPosY',-50,50.0).onChange(value=>{
+    rawShaderMat.uniforms.lightPos.value.y  = value;  
   }); 
-  shaderFolder.add(shaderProperty, 'lightPosZ',0.0,50.0).onChange(value=>{
-    rawShaderMat.uniforms.lightPos.value[2]  = value; 
+  shaderFolder.add(shaderProperty, 'lightPosZ',-50.0,50.0).onChange(value=>{
+    rawShaderMat.uniforms.lightPos.value.z = value; 
   }); 
 }
