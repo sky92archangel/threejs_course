@@ -11,8 +11,7 @@ export const vertex = /*glsl*/`
 
     attribute vec3 normal; 
     varying vec3 objectNormal;
-
-
+ 
     varying vec3 vPosition;
     varying vec4 vColor;
 
@@ -35,9 +34,10 @@ export const fragment = /*glsl*/`
     uniform float speculerRatio;
     uniform float powRatio;
     uniform float diffuseRatio;
-    uniform vec3 viewPos;
-   
+    uniform float diffuseCut;
 
+    uniform vec3 viewPos;
+    
     uniform vec3 lightPos;
     uniform  vec3 lightColor;
 
@@ -49,14 +49,15 @@ export const fragment = /*glsl*/`
     void main(){ 
         vec4 color=vec4(vColor);
 
-        //color.r += sin(vPosition.x*10.0+time)*0.5 ; 
+        // color.r += sin(vPosition.x*10.0+time)*0.5 ; 
         // lightPos = vec3(20.0,20.0,20.0);
         // lightColor = vec3(1.0,1.0,1.0);
+        
         vec3 lightDir = normalize(lightPos - vPosition);
         vec3 norm = normalize(objectNormal); 
         //================================================================
-        float diff = max(dot(norm, lightDir), 0.0);
-        vec3 diffuse =diffuseRatio * diff * lightColor; 
+        float diff = max(dot(norm, lightDir), diffuseCut);
+        vec3 diffuse = diffuseRatio * diff * lightColor; 
         //================================================================ 
         vec3 viewDir = normalize(viewPos - vPosition);
         vec3 reflectDir = reflect(-lightDir, norm);

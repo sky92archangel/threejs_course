@@ -2,6 +2,7 @@
 import * as THREE from '../../build/three.module.js';
 import { OrbitControls } from '../../jsm/controls/OrbitControls.js';
 // import * as Stats from "../../jsm/libs/stats.module.js";
+import {_raycaster_} from './raycaster_class.js'; 
 
 
 var containerDom = document.getElementById("container");
@@ -162,23 +163,17 @@ function move_select(e) {
 
     if(originObj != intersects[0].object){
       originObj.material.color.set(originColor)
-      originObj = intersects[0].object;
+      originObj = intersects[0].object; 
       originColor = originObj.material.color.clone(); 
       return;
     }
-    // if (originObj != null && originObj != intersects[0].object) {
-    //   console.log(originColor)
-    //   originObj.material.color.set(originColor);
-    //   return;
-    // } 
-  
-    // originObj.material.color.set(0xff00ff * Math.random());
+    
   }
   else {
     // console.log("没捕获到对象");
     if(originObj!=null &&originColor !=null )  { 
-      console.log(' e')
-      console.log(originColor)
+      // console.log(' e')
+      // console.log(originColor)
       originObj.material.color.set(originColor); 
      }
   }
