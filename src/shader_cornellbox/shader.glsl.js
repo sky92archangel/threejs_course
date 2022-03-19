@@ -66,10 +66,10 @@ export const fragment = /*glsl*/`
         //================================================================
         vec4 ambient = ambientRatio * color * vec4(lightColor,1.0) ;
         //================================================================
-        gl_FragColor = 
+        gl_FragColor =  
             ambient +
             vec4(diffuse,1.0)+
-            vec4(specular,1.0) ;
+            vec4(specular,1.0);
     }
 `;
 
@@ -84,3 +84,5 @@ varying ve3c3 vColor;
 vColor.xyz = color.xyz;
 
 */
+
+

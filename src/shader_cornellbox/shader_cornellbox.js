@@ -80,6 +80,12 @@ var lightColor=new THREE.Vector3(1.0,1.0,1.0);
  
 var rawShaderMat = new THREE.RawShaderMaterial(
   {
+    /*
+    uniforms:THREE.UniformsUtils.merge([ 
+      THREE.UniformsLib["commin"],
+      THREE.ShaderLib['phong'].uniforms
+    ] ),
+    */
     uniforms: {
       time: { value: 1.0 },
       ambientRatio:{value:0.5},
@@ -99,6 +105,7 @@ var rawShaderMat = new THREE.RawShaderMaterial(
     // vertexShader: document.querySelector('#vertexShader').textContent,
     // fragmentShader: document.querySelector('#fragmentShader').textContent,
 
+    // fragmentShader:[THREE.ShaderChunk.common,THREE.ShaderChunk.bsdfs].join("\n")
   }
 );
 const shaderObject = new THREE.Mesh(torusGeometry, rawShaderMat);
@@ -213,3 +220,6 @@ var gui = new dat.GUI();
     rawShaderMat.uniforms.lightPos.value.z = value; 
   }); 
 }
+
+
+
