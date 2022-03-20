@@ -3,7 +3,7 @@ export const vertex = /*glsl*/`
     precision mediump float;
     precision mediump int;
 
-    uniform mat4 modelViewMatrix;
+    uniform mat4 modelViewMatrix; 
     uniform mat4 projectionMatrix;
 
     attribute vec3 position;
